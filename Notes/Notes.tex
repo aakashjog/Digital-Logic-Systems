@@ -1,0 +1,194 @@
+\documentclass[fleqn, a4paper, 12pt, twoside]{article}
+\usepackage{exsheets}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+	\usetikzlibrary{calc, hobby, patterns, intersections}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz} %circuit diagrams
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\newcommand{\NOT}{{\textsc{not}}}
+\newcommand{\AND}{{\textsc{and}}}
+\newcommand{\OR}{{\textsc{or}}}
+\newcommand{\XOR}{{\textsc{xor}}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+%opening
+\title{Digital Logic Systems}
+\author{Aakash Jog}
+\date{2014-15}
+
+\begin{document}
+
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\tableofcontents
+
+\newpage
+\section{Lecturer Information}
+
+\textbf{Prof. Guy Even}\\
+~\\
+Office: Wolfson 202\\
+Telephone: 03-640-7769\\
+E-mail: guy@eng.tau.ac.il\\
+
+\section{Required Reading}
+
+Guy Even and Moti Medina: \textit{Digital Logic Design}
+
+\newpage
+\part{Introduction to Discrete Math}
+
+\section{Sets and Functions}
+
+\begin{definition}[Universal set]
+	The universal set is a set that contains all the possible objects.
+\end{definition}
+
+\begin{definition}[Set]
+	A set is a collection of objects from a universal set.
+\end{definition}
+
+\begin{definition}[Subset]
+	$A$ is a subset of $B$ if every element in $A$ is also an element in $B$. It is denoted as $A \subseteq B$
+\end{definition}
+
+\begin{definition}[Equal sets]
+	Two sets $A$ and $B$ are said to be equal if $A \subseteq B$ and $B \subseteq A$.
+\end{definition}
+
+\begin{definition}[Strict containment]
+	$A \subsetneq B \iff A \subseteq B \textnormal{ and } A \neq B$.
+\end{definition}
+
+\begin{definition}[Empty set]
+	The empty set is the set that does not contain any element. It is usually denoted by $\emptyset$.
+\end{definition}
+
+\begin{definition}[Power set]
+	The power set of a set $A$ is the set of all the subsets of $A$. The power set of $A$ is denoted by $P(A)$ or $2^A$.
+\end{definition}
+
+\begin{definition}[Ordered pair]
+	Two objects (possibly equal) with an order (i.e., the first object and the second object) are called an ordered pair.
+\end{definition}
+
+\begin{definition}[Cartesian product]
+	The Cartesian product of the sets $A$ and $B$ is the set 
+	\begin{equation*}
+		A \times B \triangleq \{ (a,b) | a \in A \textnormal{ and } b \in B \}
+	\end{equation*}
+\end{definition}
+
+\begin{theorem}[De Morgan's Laws]\label{De Morgan's Laws}
+	\begin{align*}
+		\overline{A \cup B} &= \overline{A} \cap \overline{B}\\
+		\overline{A \cap B} &= \overline{A} \cup \overline{B}
+	\end{align*}
+\end{theorem}
+
+\begin{theorem}[Binary relation]
+	A subset $R \subseteq A \times B$ is called a binary relation.
+\end{theorem}
+
+\begin{definition}[Function]
+	A binary relation $R \subseteq A \times B$ is a function if for every $a \in A$ there exists a unique element $b \in B$ such that $(a,b) \in R$.
+\end{definition}
+
+\begin{definition}[Extension]
+	Let $f$ and $g$ denote two functions. $g$ is an extension of $f$ if $f \subseteq g$, i.e., if every ordered pair in $f$ is also an ordered pair in $g$.
+\end{definition}
+
+\begin{definition}[Boolean function]
+	A function B : {0, 1}n → {0, 1}k is called a Boolean function.
+\end{definition}
+
+\subsection{Important Boolean Functions}
+
+\begin{definition}[$\NOT$]
+	\begin{equation*}
+		\NOT(x) = 1 - x
+	\end{equation*}
+\end{definition}
+
+\begin{definition}[$\AND$]
+	\begin{equation*}
+		\AND(x) = x \cdot y
+	\end{equation*}
+\end{definition}
+
+\begin{definition}[$\OR$]
+	\begin{equation*}
+		\OR(x) = x + y - (x \cdot y)
+	\end{equation*}
+\end{definition}
+
+\begin{definition}[$\XOR$]
+	\begin{equation*}
+		\XOR(x) = (x + y) \bmod{2}
+	\end{equation*}
+\end{definition}
+
+\section{Mathematical Induction}
+
+\begin{theorem}
+	For every $n \geq 2$, and for sets $A_1, \dots, A_n$,
+	\begin{equation*}
+		\overline{A_1 \cup \dots \cup A_n} = \overline{A_1} \cap \dots \cap \overline{A_n}
+	\end{equation*}
+\end{theorem}
+
+\begin{proof}
+	If $n = 2$, the statement is true, by \nameref{De Morgan's Laws}.\\
+	Let
+	\begin{equation*}
+		B = A_1 \cup \dots \cup A_n
+	\end{equation*}
+	If possible, let
+	\begin{align*}
+		\overline{B} &= \overline{A_1} \cap \dots \cap \overline{A_n}
+	\end{align*}
+	Therefore,
+	\begin{align*}
+		\overline{A_1 \cup \dots \cup A_n \cup A_{n + 1}} &= \overline{B \cup A_{n + 1}}\\
+		&= \overline{B} \cap \overline{A_{n + 1}}\\
+		&= (\overline{A_1} \cap \dots \cap \overline{A_n}) \cap \overline{A_{n + 1}}
+	\end{align*}
+\end{proof}
+
+\begin{theorem}[Pigeon-hole Principle]
+	If there are $n$ holes and $m > n$ pigeons then there exists at least one hole with more than one pigeon in it. Let $f : A \to \{ 1,...,n \}$, and $|A| > n$, then $f$ is not one-to-one, i.e., there are distinct $a_1, a_2 \in A ; a_1 \neq a_2$, such that $f(a_1) = f(a_2)$.
+\end{theorem}
+
+\end{document}
