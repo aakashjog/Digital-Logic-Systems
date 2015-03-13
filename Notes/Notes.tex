@@ -33,10 +33,13 @@
 
 \newcommand{\curl}{\mathrm{curl\,}}
 
-\newcommand{\NOT}{{\textsc{not}}}
-\newcommand{\AND}{{\textsc{and}}}
-\newcommand{\OR}{{\textsc{or}}}
-\newcommand{\XOR}{{\textsc{xor}}}
+\newcommand{\Not}{{\textsc{not}}}
+\renewcommand{\And}{{\textsc{and}}}
+\newcommand{\Or}{{\textsc{or}}}
+\newcommand{\Xor}{{\textsc{xor}}}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
 
 \makeatletter
 \@addtoreset{section}{part} %resets section numbers in new part
@@ -136,27 +139,27 @@ Guy Even and Moti Medina: \textit{Digital Logic Design}
 
 \subsection{Important Boolean Functions}
 
-\begin{definition}[$\NOT$]
+\begin{definition}[$\Not$]
 	\begin{equation*}
-		\NOT(x) = 1 - x
+		\Not(x) = 1 - x
 	\end{equation*}
 \end{definition}
 
-\begin{definition}[$\AND$]
+\begin{definition}[$\And$]
 	\begin{equation*}
-		\AND(x) = x \cdot y
+		\And(x) = x \cdot y
 	\end{equation*}
 \end{definition}
 
-\begin{definition}[$\OR$]
+\begin{definition}[$\Or$]
 	\begin{equation*}
-		\OR(x) = x + y - (x \cdot y)
+		\Or(x) = x + y - (x \cdot y)
 	\end{equation*}
 \end{definition}
 
-\begin{definition}[$\XOR$]
+\begin{definition}[$\Xor$]
 	\begin{equation*}
-		\XOR(x) = (x + y) \bmod{2}
+		\Xor(x) = (x + y) \bmod{2}
 	\end{equation*}
 \end{definition}
 
