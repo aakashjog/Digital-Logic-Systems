@@ -451,4 +451,63 @@ For estimation,
 	\end{algorithmic}
 \end{algorithm}
 
+\section{Binary Representation}
+
+\begin{definition}[Binary string]
+	A binary string is a finite sequence of bits.
+\end{definition}
+
+\begin{definition}[Least significant and most significant bit]
+	The least significant bit of the string $A[i : j]$ is the bit $A[k]$, where $k = \min \{i,j\}$. The most significant bit of the string A[i : j] is the bit A[l], where $l = \max \{i,j\}$.
+\end{definition}
+
+\begin{definition}[Binary number]
+	The natural number $a$ is represented in binary representation by the binary string $A[n - 1 : 0]$ as
+	\begin{equation*}
+		a \doteq \sum_{i = 0}^{n - 1} A[i] \cdot 2^i
+	\end{equation*}
+	The term $2^i$ is called the weight of the bit $A[i]$.
+\end{definition}
+
+\begin{algorithm}
+	\caption{$\mathrm{BR}(x,k)$ - An algorithm for computing a binary representation of a natural number $a$ using $k$ bits}
+	\begin{algorithmic}[1]
+		\If {$x \ge 2^k$}
+			\State \Return fail
+		\ElsIf {$k = 1$}
+			\State \Return $x$
+		\ElsIf {$x \ge 2^{k - 1}$}
+			\State \Return $\left( 1 \circ \mathrm{BR} \left( x - 2^{k - 1}, k - 1 \right) \right)$
+		\ElsIf {$x \le 2^{k - 1}$}
+			\State \Return $\left( 0 \circ \mathrm{BR} \left( x, k - 1 \right) \right)$
+		\EndIf
+	\end{algorithmic}
+\end{algorithm}
+
+\section{Propositional Logic}
+
+\begin{definition}[Constant or bit]
+	A constant or a bit is either 0 or 1. As in the case of bits, 1 is interpreted as ``true” and a 0 as a “false”.The term bit is used in Boolean functions and in circuits while the term constants is used in Boolean formulas.
+\end{definition}
+
+\begin{definition}[Variable]
+	A variable is an element in a set of variables. The set of variables is denoted by $U$. The set $U$ does not contain constants. Variables are usually denoted by upper case letters.
+\end{definition}
+
+\begin{definition}[Connectives]
+	Connectives are operators used to build longer formulas from shorter ones. The set of connectives is denoted by $\mathcal{C}$.
+\end{definition}
+
+\begin{definition}[Arity]
+	The arity of a connective is the number of operands or inputs that it accepts.
+\end{definition}
+
+\begin{definition}[Parse tree]
+	A parse tree is a pair $(G, \pi)$ where $G = (V,E)$ is a rooted tree and $\pi : V \to \{0,1\} \cup U \cup \mathcal{C}$ is a labelling function that satisfies
+	\begin{enumerate}
+		\item A leaf is labelled by a constant or a variable, i.e. if $v \in V$ is a leaf, then $\pi(v) \in \{0,1\} \cup U$.
+		\item An interior vertex $v$ is labelled by a connective whose arity is equal to the in-degree of $v$, i.e. if $v \in V$ is an interior vertex, then $\pi(v) \in \mathcal{C}$ is a connective with arity $\deg_{\textnormal{in}}(v)$.
+	\end{enumerate}
+\end{definition}
+
 \end{document}
