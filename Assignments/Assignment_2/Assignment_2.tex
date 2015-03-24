@@ -17,7 +17,8 @@
 \usepackage{enumerate} %numbered lists
 \usepackage{float} %inserting floats
 \usepackage{circuitikz} %circuit diagrams
-\usepackage{algorithm, algorithmic}
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
 
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
 
@@ -86,7 +87,7 @@
 	Dustin Chalchinsky\\
 	ID : 209741891
 	}
-\date{\formatdate{17}{3}{2015}}
+\date{\formatdate{24}{3}{2015}}
 
 \begin{document}
 	
@@ -114,16 +115,36 @@
 \begin{algorithm}
 	\caption{An algorithm that is input a directed graph and outputs whether the graph is acyclic.}
 	\begin{algorithmic}
-		\IF{$|V| = 0$}
-			\STATE let $v \in V$ \AND \RETURN $\pi(v) = 0$ 
-			\AND 
-			\RETURN acyclic
-		\ELSIF{$\exists v \in V$, such that $\deg_{\textnormal{out}} = 0$}
-			\RETURN $\left( \textnormal{TS}(V,E) \left( V \setminus v, E \setminus E_v \right) \right)$ extended by $\pi(v) = |V| - 1$.
-		\ELSE
-			\RETURN cyclic
-		\ENDIF
+		\If{$|V| = 0$}
+			\State let $v \in V$ and \Return $\pi(v) = 0$ 
+			and 
+			\Return acyclic
+		\ElsIf{$\exists v \in V$, such that $\deg_{\textnormal{out}} = 0$}
+			\State \Return $\left( \textnormal{TS}(V,E) \left( V \setminus v, E \setminus E_v \right) \right)$ extended by $\pi(v) = |V| - 1$.
+		\Else
+			\State \Return cyclic
+		\EndIf
 	\end{algorithmic}
 \end{algorithm}
+
+\begin{question}
+	Suggest an algorithm that is input a DAG $G = (V, E)$, and outputs a function $s : V \to N$, where $s(v)$ denote the length of a shortest path from a sink in $G$ to $v$.
+\end{question}
+
+\begin{solution}
+	\begin{algorithm}
+		\caption{shortest-path-lengths$(V,E)$ - An algorithm for computing the lengths of shortest paths from every node to a sink, in a DAG.}
+		\begin{algorithmic}
+			\item topological sort: $(v_0,\dots, v_{n - 1}) \gets \mathrm{TS}(V, E)$.
+			\For {$j = 0$ to $(n - 1)$}
+				\If {$v_j$ is a sink}
+					\State $d(v_j) \gets 0$
+				\Else 
+					\State $d(v_j) \gets 1 + \min \{ d(v_i) | i > j \textnormal{ and } (v_i,v_j) \in E \}$.
+				\EndIf
+			\EndFor
+		\end{algorithmic}
+	\end{algorithm}
+\end{solution}
 
 \end{document}
