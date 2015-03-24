@@ -1,0 +1,129 @@
+\documentclass[fleqn, a4paper, 12pt, oneside]{amsart}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz} %circuit diagrams
+\usepackage{algorithm, algorithmic}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+%\newcommand{\Not}{{\textsc{not}}}
+%\renewcommand{\And}{{\textsc{and}}}
+%\newcommand{\Or}{{\textsc{or}}}
+%\newcommand{\Xor}{{\textsc{xor}}}
+%\newcommand{\Nand}{{\textsc{nand}}}
+%\newcommand{\Nor}{{\textsc{nor}}}
+
+%\newcommand{\AND}{\wedge}
+%\newcommand{\OR}{\vee}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\newcommand{\strangesection}[1]{\renewcommand{\thesection}{#1}\section}
+\newcommand{\strangesubsection}[1]{\renewcommand{\thesubsection}{#1}\subsection}
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Digital Logic Systems : Assignment 1}
+\author{
+	Aakash Jog\\
+	ID : 989323563\\
+	\&\\
+	Dustin Chalchinsky\\
+	ID : 209741891
+	}
+\date{\formatdate{17}{3}{2015}}
+
+\begin{document}
+	
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	Prove that if the vertices of a directed graph G admit a topological ordering (i.e. $(u, v) \in E$ implies that  $\pi(u) < \pi(v)$), then $G$ is acyclic.
+\end{question}
+
+\begin{solution}
+	If possible, let $G = (V, E)$ be cyclic.\\
+	Therefore, after a finite number of runs of the algorithm $TS(V,E)$, there will be a case where there are no sinks.
+	In such a case, the algorithm fails.
+	Therefore, the vertices of $G$ do not assume a topological sorting.\\
+	This contradicts the given condition.\\
+	Hence, $G$ must be acyclic.
+	\qed
+\end{solution}
+
+\begin{question}
+	Suggest an algorithm that is input a directed graph and outputs whether the graph is acyclic.
+\end{question}
+
+\begin{algorithm}
+	\caption{An algorithm that is input a directed graph and outputs whether the graph is acyclic.}
+	\begin{algorithmic}
+		\IF{$|V| = 0$}
+			\STATE let $v \in V$ \AND \RETURN $\pi(v) = 0$ 
+			\AND 
+			\RETURN acyclic
+		\ELSIF{$\exists v \in V$, such that $\deg_{\textnormal{out}} = 0$}
+			\RETURN $\left( \textnormal{TS}(V,E) \left( V \setminus v, E \setminus E_v \right) \right)$ extended by $\pi(v) = |V| - 1$.
+		\ELSE
+			\RETURN cyclic
+		\ENDIF
+	\end{algorithmic}
+\end{algorithm}
+
+\end{document}
