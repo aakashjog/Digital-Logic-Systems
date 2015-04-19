@@ -1,0 +1,172 @@
+\documentclass[fleqn, a4paper, 12pt, oneside]{amsart}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz} %circuit diagrams
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+\newcommand{\Not}{{\textsc{not}}}
+\renewcommand{\And}{{\textsc{and}}}
+\newcommand{\Or}{{\textsc{or}}}
+\newcommand{\Xor}{{\textsc{xor}}}
+\newcommand{\Nand}{{\textsc{nand}}}
+\newcommand{\Nor}{{\textsc{nor}}}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\newcommand{\strangesection}[1]{\renewcommand{\thesection}{#1}\section}
+\newcommand{\strangesubsection}[1]{\renewcommand{\thesubsection}{#1}\subsection}
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Digital Logic Systems : Assignment 3}
+\author{
+	Aakash Jog\\
+	ID : 989323563\\
+	\&\\
+	Dustin Chalchinsky\\
+	ID : 209741891
+	}
+\date{\formatdate{14}{4}{2015}}
+
+\begin{document}
+	
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	Suggest an algorithm for computing the binary representation of a number $x \in [0, 2^k - 1]$ using $k$-bit strings. Your algorithm should compute the representation from the LSB to the MSB.
+\end{question}
+
+\begin{solution}
+	\begin{algorithm}
+		\caption{An algorithm for computing the binary representation of a number using $k$-bit strings.}
+		\begin{algorithmic}[1]
+			\State Let $i = 0$
+			\State Let $B[(k - 1) : 0] = 0$
+			\While{$i < k$}
+				\State $B[i] = (x \% 2)$
+				\State $x = \left\lfloor \dfrac{x}{2} \right\rfloor$
+				\State $i++$
+			\EndWhile
+			\State \Return $B[(k - 1) : 0]$
+		\end{algorithmic}
+	\end{algorithm}
+\end{solution}
+
+\begin{question}
+	This question deals with the conversion of a hexadecimal string to a binary string such that both strings represent the same natural number. Let $H[k - 1 : 0]$ denote a $k$-digit hexadecimal string. Let $X_H[n - 1 : 0]$ denote an $n$-bit binary string. Answer the following questions.
+	\begin{tasks}
+		\task 
+			Define the conversion, i.e., define the binary string $X_H$ as a function of the hexadecimal string $H$.
+		\task 
+			Let $h$ denote the number represented by the hexadecimal string $H$.
+			Prove that
+			\begin{equation*}
+				\langle X_H \rangle = h
+			\end{equation*}
+	\end{tasks}
+\end{question}
+
+\begin{solution}
+	\begin{tasks}
+		\task
+			Let $\mathrm{hex-to-bin}(h)$ be a function defined as
+			\begin{align*}
+				\mathrm{hex-to-bin}(h) &=
+					\begin{cases}
+						0000 &;\quad h = 0\\
+						0001 &;\quad h = 1\\
+						0010 &;\quad h = 2\\
+						0011 &;\quad h = 3\\
+						0100 &;\quad h = 4\\
+						0101 &;\quad h = 5\\
+						0110 &;\quad h = 6\\
+						0111 &;\quad h = 7\\
+						1000 &;\quad h = 8\\
+						1001 &;\quad h = 9\\
+						1010 &;\quad h = A\\
+						1011 &;\quad h = B\\
+						1100 &;\quad h = C\\
+						1101 &;\quad h = D\\
+						1110 &;\quad h = E\\
+						1111 &;\quad h = F\\
+					\end{cases}
+			\end{align*}
+			Assuming that $X_H$ and $H$ represent the same number,
+			\begin{align*}
+				X_H \left[ (n - 1) : (n - 4) \right] = \mathrm{hex-to-bin} \left( H[k - 1] \right)
+			\end{align*}
+		\task
+			$\langle X_H \rangle$ is the number represented by $X_H$.
+			By definition, $h$ is the number represented by $H$.\\
+			Therefore, by the initial assumptions, $X_H$ and $H$ represent the same number.
+	\end{tasks}
+\end{solution}
+
+%\begin{question}
+%	Let $s(m)$ denote the number of parse trees with $m$ nodes with the variables $U = \{X_1, \dots, X_n\}$ and the logical connective \{\And, \Or, \Not\}.
+%	Let $f(n)$ denote the number of boolean functions with domain $\{0,1\}^n$ and range $\{0,1\}$. How big does $m$ have to be so that $s(m) > f(n)$? (For example: is $m = n^2$ big enough? How about $m = 2^n$?) What does this imply on the size of the parse trees needed to represent all the Boolean functions over $n$ variables?
+%\end{question}
+
+\end{document}
