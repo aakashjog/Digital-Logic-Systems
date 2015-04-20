@@ -1,0 +1,246 @@
+\documentclass[fleqn, a4paper, 12pt, oneside]{amsart}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz} %circuit diagrams
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\theoremstyle{remark}
+\newtheorem{case}{Case}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\makeatletter
+\@addtoreset{case}{question} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+\newcommand{\Not}{{\textsc{ not }}}
+\renewcommand{\And}{{\textsc{ and }}}
+\newcommand{\Or}{{\textsc{ or }}}
+\newcommand{\Xor}{{\textsc{ xor }}}
+\newcommand{\Nxor}{{\textsc{ nxor }}}
+\newcommand{\Nand}{{\textsc{ nand }}}
+\newcommand{\Nor}{{\textsc{ nor }}}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\NOT}{\neg}
+\newcommand{\XOR}{\oplus}
+
+\newcommand{\logequiv}{\leftrightarrow}
+
+\newcommand{\dual}{\mathrm{dual\,}}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\newcommand{\strangesection}[1]{\renewcommand{\thesection}{#1}\section}
+\newcommand{\strangesubsection}[1]{\renewcommand{\thesubsection}{#1}\subsection}
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Digital Logic Systems : Assignment 4}
+\author{
+	Aakash Jog\\
+	ID : 989323563\\
+	\&\\
+	Dustin Chalchinsky\\
+	ID : 209741891\\
+	\&\\
+	Paul Mierau\\
+	ID : 932384233
+	}
+\date{\formatdate{21}{4}{2015}}
+
+\begin{document}
+	
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	Let $p$, $q$, $r$ denote boolean formulas.
+	Prove that if $p$ is logically equivalent to $q$, and $q$ is logically equivalent to $r$, then $p$ is logically equivalent to $r$.
+\end{question}
+
+\begin{solution}
+	\begin{tabular}[c]{|c|c|c||c|c|c|c|}
+		\hline
+		$p$ & $q$ & $r$ & $p \logequiv q$ & $q \logequiv r$ & $(p \logequiv q) \AND (q \logequiv r)$ & $p \logequiv r$\\
+		\hline
+		0   & 0   & 0   & 1               & 1               & 1                                      & 1 \\
+		0   & 0   & 1   & 1               & 0               & 0                                      & 0 \\
+		0   & 1   & 0   & 0               & 0               & 1                                      & 1 \\
+		0   & 1   & 1   & 0               & 1               & 0                                      & 0 \\
+		1   & 0   & 0   & 0               & 1               & 0                                      & 0 \\
+		1   & 0   & 1   & 0               & 0               & 1                                      & 1 \\
+		1   & 1   & 0   & 1               & 0               & 0                                      & 0 \\
+		1   & 1   & 1   & 1               & 1               & 1                                      & 1 \\
+		\hline
+	\end{tabular}\\
+	Therefore, as the columns of ($(p \logequiv q) \AND (q \logequiv r)$) and ($p \logequiv r$) are identical, they are equivalent.
+	Hence, if  $p$ is logically equivalent to $q$, and $q$ is logically equivalent to $r$, then $p$ is logically equivalent to $r$.
+\end{solution}
+
+\begin{question}
+	Let $L(\varphi)$ denote the number of vertices in the parse tree of $\varphi$ that are not labelled by negation.
+	Prove that $L \left( \mathrm{DM}(\varphi) \right) = L(\varphi)$, for every boolean formula $\varphi$ that uses the logical connectives $\{\Not, \Or, \And\}$.	
+\end{question}
+
+\begin{solution}
+	In the De Morgan dual of $\varphi$, all vertices labeled by $\Or$ are changed to vertices labeled by $\And$, and vice-versa.
+	Depending on $\varphi$, vertices labelled by $\Not$ are be added or removed.\\
+	Therefore, the number of vertices labelled by $\And$ in $\varphi$ is equal to the number of vertices labelled by $\Or$ in $\mathrm{DM}(\varphi)$.
+	Similarly for $\Or$ in $\varphi$ and $\And$ in $\mathrm{DM}(\varphi)$.\\
+	The number of vertices labelled by variables is unchanged in $\varphi$ and $\mathrm{DM}(\varphi)$.\\
+	Therefore, the total number of vertices not labelled by negation, i.e. labelled only be variables, $\And$, and $\Or$ is the same in the parse trees of $\varphi$ and $\mathrm{DM}(\varphi)$.
+	Therefore, $L \left( \mathrm{DM}(\varphi) \right) = L(\varphi)$.
+	\qed
+\end{solution}
+
+\addtocounter{question}{1}
+
+%\begin{question}
+%	For two vectors $x = (x_0, \dots, x_{k - 1})$ and $y = (y_0, \dots, y_{k - 1})$ we say that $x \geq y$ if $x_i \geq y_i$ for every $i \in \{0, 1,\dots, k - 1\}$.
+%	A function $f : \{0,1\}^k \rightarrow \{0,1\}$ is monotone if $\forall x,y \in k$
+%	\begin{equation*}
+%		x \geq y \implies f(x) \geq f(y)
+%	\end{equation*}
+%	Prove that if $\varphi$ uses only connectives in $\{\And, \Or\}$, then the boolean function $B_\varphi$ is monotone.
+%\end{question}
+%
+%\begin{solution}
+%
+%\end{solution}<++>
+
+\begin{question}
+	Add the following two reduction rules to Algorithm $\mathrm{DM}(\varphi)$ so that you can also deal with the $\Xor$ and $\Nxor$ connectives:
+	\begin{enumerate}
+		\item If $\varphi = (\varphi_1 \Xor \varphi_2)$, then return $(\mathrm{DM}(\varphi_1) \Nxor \mathrm{DM}(\varphi_2))$.
+		\item If $\varphi = (\varphi_1 \Nxor \varphi_2)$, then return $(\mathrm{DM}(\varphi_1) \Xor \mathrm{DM}(\varphi_2))$.
+	\end{enumerate}
+	Prove that, even after this modification, $\mathrm{DM}(\varphi) \logequiv \neg \varphi$ is a tautology.
+\end{question}
+
+\begin{solution}
+	\begin{align*}
+		x \Xor y &= (x \OR y) \AND (x \AND (\NOT y))\\
+		x \Nxor y &= \NOT ((x \OR y) \AND (x \AND (\NOT y)))
+	\end{align*}
+	Therefore, if
+	\begin{align*}
+		\varphi &\equiv \varphi_1 \Xor \varphi_2\\
+		\therefore \varphi &\equiv (\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2)\\
+		\therefore \mathrm{DM}(\varphi) &\equiv \mathrm{DM}((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2))\\
+		&\equiv (\NOT \varphi_1 \AND \NOT \varphi_2) \OR (\NOT \varphi_1 \OR \varphi_2)\\
+		&\equiv \NOT (\varphi_1 \OR \varphi_2) \OR \NOT (\varphi_1 \AND \NOT \varphi_2)\\
+		&\equiv \NOT ((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2))\\
+		&\equiv \NOT (\varphi_1 \Xor \varphi_2)\\
+		&\equiv \NOT (\varphi)
+	\end{align*}
+	Therefore, as $\mathrm{DM}(\varphi) \equiv \NOT \varphi$, $\mathrm{DM}(\varphi) \logequiv \NOT \varphi$ is a tautology.\\
+	~\\
+	Similarly, if
+	\begin{align*}
+		\varphi &\equiv \varphi_1 \Nxor \varphi_2\\
+		\therefore \varphi &\equiv \NOT ((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2))\\
+		\therefore \mathrm{DM}(\varphi) &\equiv \mathrm{DM}(\NOT ((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2)))\\
+		&\equiv \mathrm{DM} (\NOT (\varphi_1 \OR \varphi_2) \OR \NOT (\varphi_1 \AND \NOT \varphi_2))\\
+		&\equiv \mathrm{DM} ((\NOT \varphi_1 \AND \NOT \varphi_2) \OR (\NOT \varphi_1 \OR \varphi_2))\\
+		&\equiv (\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2)\\
+		&\equiv \varphi_1 \Xor \varphi_2\\
+		&\equiv \NOT (\varphi_1 \Nxor \varphi_2)\\
+		&\equiv \NOT (\varphi)
+	\end{align*}
+	Therefore, as $\mathrm{DM}(\varphi) \equiv \NOT \varphi$, $\mathrm{DM}(\varphi) \logequiv \NOT \varphi$ is a tautology.
+	\qed
+\end{solution}
+
+\begin{question}
+	Let $\varphi_k$ denote the boolean formula in which the variable $X$ is negated $k$ times. Run algorithm $\mathrm{NNF}(\varphi_k)$.
+	What is the outcome?
+	Prove your result.
+	Hint: distinguish between an even $k$ and an odd $k$.
+\end{question}
+
+\begin{solution}
+	\begin{align*}
+		\varphi_k &= \underbrace{\NOT(\NOT(\dots(\NOT X)))}_{k \text{ times }}\\
+		\therefore \mathrm{NNF}(\varphi_k) &= \mathrm{DM}(\mathrm{NNF}(\underbrace{\NOT(\NOT(\dots(\NOT X)))}_{k - 1 \text{ times }}))\\
+		&= \underbrace{\mathrm{DM}(\mathrm{DM}(\dots(\mathrm{DM}}_{k - 1 \text{ times }}(\mathrm{NNF}(X)))))\\
+		&= \underbrace{\mathrm{DM}(\mathrm{DM}(\dots(\mathrm{DM}}_{k - 1 \text{ times }}(\NOT X))))
+	\end{align*}
+	\begin{case}[$k$ is odd]
+		If $k$ is odd, $k - 1$ must be even.\\
+		Therefore, as $\mathrm{DM}(\mathrm{DM}(\varphi))$ is logically equivalent to $\varphi$, the $\dfrac{k - 1}{2}$ pairs of $\mathrm{DM}$ will be cancelled out.
+		Hence, $\mathrm{NNF}(\varphi_k)$ is logically equivalent to $\NOT k$.\\
+		Therefore,
+		\begin{equation*}
+			\mathrm{NNF}(\varphi_k) \equiv \NOT k
+		\end{equation*}
+	\end{case}
+	\begin{case}[$k$ is even]
+		If $k$ is odd, $k - 1$ must be odd.\\
+		Therefore, as $\mathrm{DM}(\mathrm{DM}(\varphi))$ is logically equivalent to $\varphi$, the $\dfrac{k - 2}{2}$ pairs of $\mathrm{DM}$ will be cancelled out.
+		Hence, $\mathrm{NNF}(\varphi_k)$ is logically equivalent to $\mathrm{DM}(\NOT k)$.\\
+		Therefore,
+		\begin{equation*}
+			\mathrm{NNF}(\varphi_k) \equiv k
+		\end{equation*}
+	\end{case}
+\end{solution}
+
+\end{document}
