@@ -177,33 +177,33 @@
 
 \begin{solution}
 	\begin{align*}
-		x \Xor y &= (x \OR y) \AND (x \AND (\NOT y))\\
-		x \Nxor y &= \NOT ((x \OR y) \AND (x \AND (\NOT y)))
+		x \Xor y &= (x \OR y) \AND \NOT(x \AND y))\\
+		         &= (x \OR y) \AND (\NOT x \OR \NOT y))\\
+		x \Nxor y &= \NOT (x \OR y) \OR (x \AND y)
 	\end{align*}
 	Therefore, if
 	\begin{align*}
 		\varphi &\equiv \varphi_1 \Xor \varphi_2\\
-		\therefore \varphi &\equiv (\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2)\\
-		\therefore \mathrm{DM}(\varphi) &\equiv \mathrm{DM}((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2))\\
-		&\equiv (\NOT \varphi_1 \AND \NOT \varphi_2) \OR (\NOT \varphi_1 \OR \varphi_2)\\
-		&\equiv \NOT (\varphi_1 \OR \varphi_2) \OR \NOT (\varphi_1 \AND \NOT \varphi_2)\\
-		&\equiv \NOT ((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2))\\
+		\therefore \varphi &\equiv (\varphi_1 \OR \varphi_2) \AND (\NOT \varphi_1 \OR \NOT \varphi_2)\\
+		\therefore \mathrm{DM}(\varphi) &\equiv (\varphi_1 \OR \varphi_2) \AND (\NOT \varphi_1 \OR \NOT \varphi_2)\\
+		&\equiv (\NOT \varphi_1 \AND \NOT \varphi_2) \OR (\varphi_1 \AND \varphi_2)\\
+		&\equiv \NOT (\varphi_1 \OR \varphi_2) \OR (\varphi_1 \AND \varphi_2)\\
+		&\equiv \varphi_1 \Nxor \varphi_2\\
 		&\equiv \NOT (\varphi_1 \Xor \varphi_2)\\
-		&\equiv \NOT (\varphi)
+		&\equiv \NOT \varphi
 	\end{align*}
 	Therefore, as $\mathrm{DM}(\varphi) \equiv \NOT \varphi$, $\mathrm{DM}(\varphi) \logequiv \NOT \varphi$ is a tautology.\\
 	~\\
 	Similarly, if
 	\begin{align*}
 		\varphi &\equiv \varphi_1 \Nxor \varphi_2\\
-		\therefore \varphi &\equiv \NOT ((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2))\\
-		\therefore \mathrm{DM}(\varphi) &\equiv \mathrm{DM}(\NOT ((\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2)))\\
-		&\equiv \mathrm{DM} (\NOT (\varphi_1 \OR \varphi_2) \OR \NOT (\varphi_1 \AND \NOT \varphi_2))\\
-		&\equiv \mathrm{DM} ((\NOT \varphi_1 \AND \NOT \varphi_2) \OR (\NOT \varphi_1 \OR \varphi_2))\\
-		&\equiv (\varphi_1 \OR \varphi_2) \AND (\varphi_1 \AND \NOT \varphi_2)\\
+		\therefore \varphi &\equiv \NOT (\varphi_1 \OR \varphi_2) \OR (\varphi_1 \AND \varphi_2)\\
+		&\equiv (\NOT \varphi_1 \AND \NOT \varphi_2) \OR (\varphi_1 \AND \varphi_2)\\
+		\therefore \mathrm{DM}(\varphi) &\equiv (\varphi_1 \OR \varphi_2) \AND (\NOT \varphi_1 \OR \NOT \varphi_2)\\
+		&\equiv (\varphi_1 \OR \varphi_2) \AND \NOT (\varphi_1 \AND \varphi_2)\\
 		&\equiv \varphi_1 \Xor \varphi_2\\
 		&\equiv \NOT (\varphi_1 \Nxor \varphi_2)\\
-		&\equiv \NOT (\varphi)
+		&\equiv \NOT \varphi
 	\end{align*}
 	Therefore, as $\mathrm{DM}(\varphi) \equiv \NOT \varphi$, $\mathrm{DM}(\varphi) \logequiv \NOT \varphi$ is a tautology.
 	\qed
@@ -221,24 +221,24 @@
 		\varphi_k &= \underbrace{\NOT(\NOT(\dots(\NOT X)))}_{k \text{ times }}\\
 		\therefore \mathrm{NNF}(\varphi_k) &= \mathrm{DM}(\mathrm{NNF}(\underbrace{\NOT(\NOT(\dots(\NOT X)))}_{k - 1 \text{ times }}))\\
 		&= \underbrace{\mathrm{DM}(\mathrm{DM}(\dots(\mathrm{DM}}_{k - 1 \text{ times }}(\mathrm{NNF}(X)))))\\
-		&= \underbrace{\mathrm{DM}(\mathrm{DM}(\dots(\mathrm{DM}}_{k - 1 \text{ times }}(\NOT X))))
+		&= \underbrace{\mathrm{DM}(\mathrm{DM}(\dots(\mathrm{DM}}_{k - 1 \text{ times }}(X))))
 	\end{align*}
 	\begin{case}[$k$ is odd]
 		If $k$ is odd, $k - 1$ must be even.\\
 		Therefore, as $\mathrm{DM}(\mathrm{DM}(\varphi))$ is logically equivalent to $\varphi$, the $\dfrac{k - 1}{2}$ pairs of $\mathrm{DM}$ will be cancelled out.
-		Hence, $\mathrm{NNF}(\varphi_k)$ is logically equivalent to $\NOT X$.\\
+		Hence, $\mathrm{NNF}(\varphi_k)$ is logically equivalent to $X$.\\
 		Therefore,
 		\begin{equation*}
-			\mathrm{NNF}(\varphi_k) \equiv \NOT X
+			\mathrm{NNF}(\varphi_k) \equiv X
 		\end{equation*}
 	\end{case}
 	\begin{case}[$k$ is even]
 		If $k$ is odd, $k - 1$ must be odd.\\
 		Therefore, as $\mathrm{DM}(\mathrm{DM}(\varphi))$ is logically equivalent to $\varphi$, the $\dfrac{k - 2}{2}$ pairs of $\mathrm{DM}$ will be cancelled out.
-		Hence, $\mathrm{NNF}(\varphi_k)$ is logically equivalent to $\mathrm{DM}(\NOT X)$.\\
+		Hence, $\mathrm{NNF}(\varphi_k)$ is logically equivalent to $\mathrm{DM}(X)$.\\
 		Therefore,
 		\begin{equation*}
-			\mathrm{NNF}(\varphi_k) \equiv X
+			\mathrm{NNF}(\varphi_k) \equiv \NOT X
 		\end{equation*}
 	\end{case}
 \end{solution}
