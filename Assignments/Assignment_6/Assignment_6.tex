@@ -1,0 +1,434 @@
+\documentclass[fleqn, a4paper, 11pt, oneside]{amsart}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate, enumitem} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz} %circuit diagrams
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\theoremstyle{remark}
+\newtheorem{case}{Case}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\makeatletter
+\@addtoreset{case}{question} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+\newcommand{\Not}{{\textsc{ not }}}
+\renewcommand{\And}{{\textsc{ and }}}
+\newcommand{\Or}{{\textsc{ or }}}
+\newcommand{\Xor}{{\textsc{ xor }}}
+\newcommand{\Nxor}{{\textsc{ nxor }}}
+\newcommand{\Nand}{{\textsc{ nand }}}
+\newcommand{\Nor}{{\textsc{ nor }}}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\bigAND}{\bigwedge}
+\newcommand{\OR}{\vee}
+\newcommand{\bigOR}{\bigvee}
+\newcommand{\NOT}{\neg}
+\newcommand{\XOR}{\oplus}
+\newcommand{\bigXOR}{\bigoplus}
+
+\newcommand{\logequiv}{\leftrightarrow}
+
+\newcommand{\dual}{\mathrm{dual\,}}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\newcommand{\strangesection}[1]{\renewcommand{\thesection}{#1}\section}
+\newcommand{\strangesubsection}[1]{\renewcommand{\thesubsection}{#1}\subsection}
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Digital Logic Systems : Assignment 6}
+\author{
+	Aakash Jog\\
+	ID : 989323563\\
+	\&\\
+	Dustin Chalchinsky\\
+	ID : 209741891\\
+	\&\\
+	Paul Mierau\\
+	ID : 932384233
+	}
+\date{\formatdate{26}{5}{2015}}
+
+\begin{document}
+	
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	Prove that every output bit of a decoder depends on all the inputs.
+\end{question}
+
+\begin{solution}
+	If possible, let an output bit of a decoder, $\textsc{decoder}(n)$, be independent of one of the inputs.\\
+	Therefore, WLG, let the $k^{\text{th}}$ bit of the output be independent of the $l^{\text{th}}$ bit of the input.\\
+	Let the input be $i[1:n]$ and the output be $o[1:2^n]$.\\
+	Therefore, $o[k]$ is unchanged by $flip_{l}(i)$.\\
+	Let $o_1$ be the output of $\textsc{decoder}(n)$ for some $i_1$, such that $o_1[k] = 1$.\\
+	Therefore, $o_1[k] = 1$ for $flip_l(i_1)$.\\
+	Therefore, either $wt(o_1) \neq 1$, or the output of $\textsc{decoder}(n)$ is the same for $i_1$ and $flip_l(i_1)$.\\
+	If $wt(o)$, it contradicts the definition of the decoder.\\
+	If the outputs for $i_1$ and $flip_l(i_1)$ are the same, it contradicts the fact that any decoder is one-to-one.\\
+	Hence, every output bit of $\textsc{decoder}(n)$ must be dependent on all the input bits.
+\end{solution}
+
+\begin{question}
+	Prove that the logical connective that corresponds to a MUX-gate is complete.
+	(Hint: Implement a complete set of connectives using only a MUX and constants.)
+\end{question}
+
+\begin{solution}
+	Let $D[0]$, $D[1]$, and $S$ be the inputs of a MUX-gate.
+	Let $Y$ be the output of the MUX-gate.\\
+	Therefore,\\
+	\begin{tabular}{|c|c|c||c|}
+		\hline
+		$D[0]$ & $D[1]$ & $S = X_1$ & $Y$ \\
+		\hline
+		1      & 0      & 0         & 1   \\
+		1      & 0      & 1         & 0   \\
+		\hline
+	\end{tabular}\\
+	Therefore, if $D[0] = 1$, $D[1] = 0$, $S = X_1$, $Y = \NOT X_1$.\\
+	\begin{tabular}{|c|c|c||c|}
+		\hline
+		$D[0]$ & $D[1] = X_1$ & $S = X_2$ & $Y$ \\
+		\hline
+		0      & 0            & 0         & 0   \\
+		0      & 0            & 1         & 0   \\
+		0      & 1            & 0         & 0   \\
+		0      & 1            & 1         & 1   \\
+		\hline
+	\end{tabular}\\
+	Therefore, if $D[0] = 1$, $D[1] = X_1$, $S = X_2$, $Y = X_1 \AND X_2$.\\
+	\begin{tabular}{|c|c|c||c|}
+		\hline
+		$D[0] = X_1$ & $D[1]$ & $S = X_2$ & $Y$ \\
+		\hline
+		0            & 1      & 0         & 0   \\
+		0            & 1      & 1         & 1   \\
+		1            & 1      & 0         & 1   \\
+		1            & 1      & 1         & 1   \\
+		\hline
+	\end{tabular}\\
+	Therefore, if $D[0] = X_1$, $D[1] = 1$, $S = X_2$, $Y = X_1 \OR X_2$.\\
+	Therefore, as the complete set of connectives $\left\{ \Not, \And, \Or \right\}$ can be constructed using a MUX-gate only, it is a complete set of connectives.
+\end{solution}
+
+\begin{question}
+	Design a combinational circuit $JO(n)$ (just one) specified as follows:\\
+	\begin{tabular}[c]{l l}
+		Input         & $x \in \{0,1\}^n$                            \\
+		Output        & $y,z \in \{0,1\}$                            \\
+		Functionality & $z = 1 \iff x = 0^n$, $y = 1 \iff wt(x) = 1$ \\
+	\end{tabular}
+	\begin{enumerate}
+		\item Prove the correctness of your design.
+		\item Analyze the asymptotic cost of your design.
+		\item Analyze the asymptotic propagation delay of your design.
+		\item Prove asymptotic lower bounds on the cost and propagation delay of $JO(n)$.
+	\end{enumerate}
+\end{question}
+
+\begin{solution}
+	\begin{figure}[H]
+		\begin{circuitikz}[scale = 0.5]
+			\begin{scope}
+				\node [left] at (-5,5) {$x$};
+
+				\draw ($ (-4,5) + (2pt,2pt) $) -- ($ (-4,5) + (-2pt,-2pt) $) node [below] {$n$};
+
+				\draw (-5,5) to [generic = $\Not_n$] (0,5);
+
+				\draw ($ (-1,5) + (2pt,2pt) $) -- ($ (-1,5) + (-2pt,-2pt) $) node [below] {$n$};
+
+				\draw (0,5) -| (0,10);
+				\draw (0,5) -| (0,8);
+				\draw (0,5) -| (0,6);
+				\draw (0,5) -| (0,4);
+				\draw (0,5) -| (0,0);
+	
+				\draw ($ (1,15) + (2pt,2pt) $) -- ($ (1,15) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (1,10) + (2pt,2pt) $) -- ($ (1,10) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (1,8) + (2pt,2pt) $) -- ($ (1,8) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (1,6) + (2pt,2pt) $) -- ($ (1,6) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (1,4) + (2pt,2pt) $) -- ($ (1,4) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (1,0) + (2pt,2pt) $) -- ($ (1,0) + (-2pt,-2pt) $) node [below] {$n$};
+
+				\draw (0,10) to [generic = $flip_0$] (5,10);
+				\draw (0,8) to [generic = $flip_1$] (5,8);
+				\draw (0,6) to [generic = $flip_2$] (5,6);
+				\draw (0,4) to [generic = $flip_3$] (5,4);
+				\draw (0,0) to [generic = $flip_n$] (5,0);
+	
+				\draw (5,10) to [generic = $\And_n$] (10,10);
+				\draw (5,8) to [generic = $\And_n$] (10,8);
+				\draw (5,6) to [generic = $\And_n$] (10,6);
+				\draw (5,4) to [generic = $\And_n$] (10,4);
+				\node [above] at (2.5,2) {$\vdots$};
+				\draw (5,0) to [generic = $\And_n$] (10,0);
+	
+				\draw ($ (5,10) + (2pt,2pt) $) -- ($ (5,10) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (5,8) + (2pt,2pt) $) -- ($ (5,8) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (5,6) + (2pt,2pt) $) -- ($ (5,6) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (5,4) + (2pt,2pt) $) -- ($ (5,4) + (-2pt,-2pt) $) node [below] {$n$};
+				\draw ($ (5,0) + (2pt,2pt) $) -- ($ (5,0) + (-2pt,-2pt) $) node [below] {$n$};
+	
+				\draw (10,10) |- (12,5);
+				\draw (10,8) |- (12,5);
+				\draw (10,6) |- (12,5);
+				\draw (10,4) |- (12,5);
+				\draw (10,0) |- (12,5);
+	
+				\draw (12,5) to [generic = $\Or_n$] (17,5);
+				\draw ($ (12,5) + (2pt,2pt) $) -- ($ (12,5) + (-2pt,-2pt) $) node [below] {$n$};
+	
+				\node [right] at (17,5) {$y$};
+			\end{scope}
+
+			\begin{scope}
+				\draw (-1,5) -| (0,15);
+
+				\draw (0,15) to [generic = $\And_n$] (5,15);
+
+				\draw (5,15) -- (17,15);
+
+				\node [right] at (17,15) {$z$};
+			\end{scope}
+		\end{circuitikz}
+		\caption{$JO(n)$}
+	\end{figure}
+	Where $\And_n$ is $\And$ of $n$ bits, implemented using an optimized $\And$ tree, $\Or_n$ is $\Or$ of $n$ bits, implemented using an optimized $\Or$.\\
+	$\Not_n$ and $flip_i$ are implemented as shown.
+	\begin{figure}[H]
+		\begin{circuitikz}[scale = 0.6]
+			\draw (2,10) node [not port] (not0) {};
+			\draw (2,8) node [not port] (not1) {};
+			\draw (2,6) node [not port] (not2) {};
+			\draw (2,4) node [not port] (not3) {};
+			\node at (2,2) {$\vdots$};
+			\draw (2,0) node [not port] (not4) {};
+
+			\node [left] at (not0.in) {$x[0]$};
+			\node [left] at (not1.in) {$x[1]$};
+			\node [left] at (not2.in) {$x[2]$};
+			\node [left] at (not3.in) {$x[3]$};
+			\node [left] at (not4.in) {$x[n]$};
+
+			\draw (not0.out) -| (4,5);
+			\draw (not1.out) -| (4,5);
+			\draw (not2.out) -| (4,5);
+			\draw (not3.out) -| (4,5);
+			\draw (not4.out) -| (4,5);
+
+			\draw (4,5) -- (6,5);
+
+			\draw ($ (5,5) + (2pt,2pt) $) -- ($ (5,5) + (-2pt,-2pt) $) node [below] {$n$};
+		\end{circuitikz}
+		\caption{$\Not_n$}
+	\end{figure}
+	\begin{figure}[H]
+		\begin{circuitikz}[scale = 0.6]
+			\node at (2,6) {$\vdots$};
+			\draw (2,4) node [not port] (not) {};
+			\node at (2,2) {$\vdots$};
+
+			\node [left] at (1,10) {$x[0]$};
+			\node [left] at (1,8) {$x[1]$};
+			\node [left] at (1,4) {$x[i]$};
+			\node [left] at (not4.in) {$x[n]$};
+
+			\draw (1,10) -| (4,5);
+			\draw (1,8) -| (4,5);
+			\draw (not.out) -| (4,5);
+			\draw (1,0) -| (4,5);
+
+			\draw (4,5) -- (6,5);
+
+			\draw ($ (5,5) + (2pt,2pt) $) -- ($ (5,5) + (-2pt,-2pt) $) node [below] {$n$};
+		\end{circuitikz}
+		\caption{$flip_i(x)$}
+	\end{figure}
+	\begin{enumerate}[leftmargin = *]
+		\item
+			\begin{align*}
+				y &= \bigXOR_{i = 0}^{n - 1} \overline{x[0]} \AND \dots \AND x[i] \AND \dots \AND \overline{x[n - 1]}\\
+				z &= \bigAND_{i = 0}^{n - 1} \overline{x[i]}
+			\end{align*}
+			If $n = 1$,\\
+			\begin{align*}
+				y &= x[0] \XOR \overline{x[1]}\\
+				z &= \overline{x[0]} \AND \overline{x[1]}
+			\end{align*}
+			Therefore,\\
+			\begin{tabular}{|c|c||c|c|}
+				\hline
+				$x[0]$ & $x[1]$ & $y$ & $z$ \\
+				\hline
+				0      & 0      & 0   & 1   \\
+				0      & 1      & 1   & 0   \\
+				1      & 0      & 1   & 0   \\
+				1      & 1      & 0   & 0   \\
+				\hline
+			\end{tabular}\\
+			Therefore, the circuit $JO(2)$ works as intended.\\
+			If possible let $JO(n)$ work as intended.\\
+			Therefore,
+			\begin{align*}
+				y_n &= 1 &\iff&& wt(x_n) &= 1\\
+				z_n &= 1 &\iff&& x_n &= 0^n
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_{n + 1} &= \bigXOR_{i = 0}^{n} \overline{x[0]} \AND \dots \AND x[i] \AND \dots \AND \overline{x[n]}\\
+				&= \bigXOR_{i = 0}^{n} \left( \overline{x[0]} \AND \dots \AND x[i] \AND \dots \AND \overline{x[n - 1]} \right) \AND \overline{x[n]}\\
+				&= \quad \left( \bigXOR_{i = 0}^{n - 1} \left( \overline{x[0]} \AND \dots \AND x[i] \AND \dots \AND \overline{x[n - 1]} \right) \AND \overline{x[n]} \right)\\
+				&\quad \XOR \left( \overline{x[0]} \AND \dots \AND  \overline{x[n - 1]} \AND x[n] \right)\\
+				&= y_n \AND \overline{x[n]} \XOR \left( \overline{x[0]} \AND \dots \AND  \overline{x[n - 1]} \AND x[n] \right)
+			\end{align*}
+			If $x_{n + 1}[n] = 0$,
+			\begin{align*}
+				y_{n + 1} &= \left( y_n \AND 1 \right) \XOR \left( z_n \AND 0 \right)\\
+				&= y_1 \XOR 0\\
+				&= y_1\\
+				&= wt(x_n)\\
+				&= wt(x_{n + 1})
+			\end{align*}
+			If $x_{n + 1}[n] = 1$,
+			\begin{align*}
+				y_{n + 1} &= \left( y_n \AND 0 \right) \XOR \left( z_n \AND 1 \right)\\
+				&= 0 \XOR z_n
+			\end{align*}
+			$x_n = 0^n$ if and only if  $z_n = 1$.\\
+			If and only if,
+			\begin{align*}
+				y_{n + 1} &= 0 \XOR 1\\
+				&= 1
+			\end{align*}
+			Therefore, $y_{n + 1} = 1$ if and only if $x[n] = 1$ and $z_n = 1$, i.e. $x[0] = \dots = x[n - 1] = 0$.\\
+			Therefore, $wt(x_{n + 1}) = 1$.\\
+			$x_n \neq 0^n$ if and only if $z_n = 0$.\\
+			If and only if,
+			\begin{align*}
+				y_{n + 1} &= 0 \XOR 0\\
+				&= 0
+			\end{align*}
+			Therefore, $y_{n + 1} = 0$ if and only if $x[n] = 1$ and $z_n = 0$, i.e. at least one of $x[0], \dots, x[n - 1]$ is 1.
+			Therefore, $wt(x_{n + 1}) > 1$.
+			~\\
+			Therefore, $y_{n + 1} = 1$ if and only if $wt(x_{n + 1}) = 1$.\\
+			~\\
+			~\\
+			\begin{align*}
+				z_{n + 1} &= \bigAND_{i = 0}^{n} \overline{x_{n + 1}[i]}\\
+				&= \left( \bigAND_{i = 0}^{n - 1} \overline[i] \right) \AND \overline{x_{n + 1}[n]}\\
+				&= z_n \AND \overline{x_{n + 1}[n]}
+			\end{align*}
+			If $x_{n + 1}[n] = 0$,
+			\begin{align*}
+				z_{n + 1} &= z_n \AND 1\\
+				&= z_n
+			\end{align*}
+			Therefore, $x_{n + 1} = 0^{n + 1}$ if and only if $x_n = 0^n$.\\
+			If $x_{n + 1}[n] = 1$,
+			\begin{align*}
+				z_{n + 1} &= z_n \AND 0\\
+				&= 0
+			\end{align*}
+			Therefore, $x_{n + 1} \neq 0^{n + 1}$ if and only if $x_{n + 1}[n] = 1$.\\
+			Hence, by induction, $JO(n)$ works as intended, $\forall n \ge 2$.
+			\qed
+		\item
+			\begin{align*}
+				c(y) &= \quad c(\Not_n)\\
+				&\quad + n \cdot c(flip)\\
+				&\quad + n \cdot c(\And_n)\\
+				&\quad + c(\Or_n)\\
+				&=\quad n \cdot c(\Not)\\
+				&\quad + n (n - 1) c(\Not)\\
+				&\quad + n (n - 1) c(\And)\\
+				&\quad + (n - 1) c(\Or)
+			\end{align*}
+			\begin{align*}
+				\text{cost}(z) &= (n - 1) \text{cost}(\Or) + \text{cost}(\Not)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				c(y) &= O\left( n^2 \right)\\
+				c(z) &= O (n)\\
+				\therefore \text{cost} &= O\left( n^2 \right)
+			\end{align*}
+		\item
+			\begin{align*}
+				d(y) &= d(\Not_n) + d(flip_i) + d(\And_n) + d(\Or_n)\\
+				d(z) &= d(\Not_n) + d(\And_n)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\text{delay} &= \max\left\{ d(y) , d(z) \right\}\\
+				&= d(\Not_n) + d(flip_i) + d(\And_n) + d(\Or_n)\\
+				&= \Theta(\log_2 n)
+			\end{align*}
+	\end{enumerate}
+\end{solution}
+
+\end{document}
