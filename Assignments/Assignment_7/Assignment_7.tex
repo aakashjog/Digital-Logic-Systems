@@ -1,0 +1,215 @@
+\documentclass[fleqn, a4paper, 11pt, oneside]{amsart}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+%\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate, enumitem} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz} %circuit diagrams
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\theoremstyle{remark}
+\newtheorem{case}{Case}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\makeatletter
+\@addtoreset{case}{question} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+\newcommand{\Not}{{\textsc{ not }}}
+\renewcommand{\And}{{\textsc{ and }}}
+\newcommand{\Or}{{\textsc{ or }}}
+\newcommand{\Xor}{{\textsc{ xor }}}
+\newcommand{\Nxor}{{\textsc{ nxor }}}
+\newcommand{\Nand}{{\textsc{ nand }}}
+\newcommand{\Nor}{{\textsc{ nor }}}
+
+\newcommand{\AND}{\wedge}
+\newcommand{\bigAND}{\bigwedge}
+\newcommand{\OR}{\vee}
+\newcommand{\bigOR}{\bigvee}
+\newcommand{\NOT}{\neg}
+\newcommand{\XOR}{\oplus}
+\newcommand{\bigXOR}{\bigoplus}
+
+\newcommand{\logequiv}{\leftrightarrow}
+
+\newcommand{\dual}{\mathrm{dual\,}}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\newcommand{\strangesection}[1]{\renewcommand{\thesection}{#1}\section}
+\newcommand{\strangesubsection}[1]{\renewcommand{\thesubsection}{#1}\subsection}
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Digital Logic Systems : Assignment 7}
+\author{
+	Aakash Jog\\
+	ID : 989323563\\
+	\&\\
+	Dustin Chalchinsky\\
+	ID : 209741891\\
+	\&\\
+	Paul Mierau\\
+	ID : 932384233
+	}
+\date{\formatdate{7}{6}{2015}}
+
+\begin{document}
+	
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	Design a combinational circuit that implements the following specification.
+	\begin{tabular}{l l}
+		        Input & $X[2^k - 1 : 0] \in \{0,1\}^{2^k}$                                                             \\
+		       Output & $L, R \in \{0,1\}^k$                                                                           \\
+		Functionality & $wt(X) = 2 \implies X\left[ \langle L \rangle \right] = X\left[ \langle R \rangle \right] = 1$ \\
+	\end{tabular}
+\end{question}
+
+\def\demux#1#2{
+	\begin{scope}[shift = {#1}, rotate = {#2}]
+		\draw (-0.5,0.5) -- (-0.5,-0.5) -- (0.5,-1) -- (0.5,1) -- cycle;
+
+		\draw (-0.5,0) -- (-1,0);
+
+		\draw (0.5,0.5) -- (1,0.5);
+		\draw (0.5,-0.5) -- (1,-0.5);
+
+		\draw (0,-0.75) -- (0,-1);
+
+		\node [left] at (0.5,0.5) {\tiny{$0$}};
+		\node [left] at (0.5,-0.5) {\tiny{$1$}};
+	\end{scope}
+}
+
+\def\JO#1#2#3{
+	\begin{scope}[shift = {#1}, rotate = {#2}]
+		\draw (-1,-1) rectangle (1,1);
+
+		\draw (-1,0) -- (-2,0);
+
+		\draw (1,0.5) -- (2,0.5);
+		\draw (1,-0.5) -- (2,-0.5);
+
+		\node [left] at (1,0.5) {\tiny{$y$}};
+		\node [left] at (1,-0.5) {\tiny{$z$}};
+		\node at (0,0) {$JO(${#3}$)$};
+	\end{scope}
+}
+
+\begin{solution}
+	\begin{figure}[H]
+		\begin{tikzpicture}[scale = 0.93]
+			\begin{scope}
+				\demux{(5,0)}{0};
+
+				\draw (0,0) -- (4,0);
+			
+				\draw (6,0.5) -- (6,1) -- (7,1);
+				\draw (6,-0.5) -- (6,-1) -- (7,-1);
+
+				\node [left] at (0,0) {$X[2^k - 1 : 2^{k - 1} - 1]$};
+
+				\draw (1,0) -- (1,-4) -- (2,-4);
+
+				\JO{(3,-4)}{0}{$2^{k - 1}$};
+
+				\draw (5,-3.5) -- (5,-1);
+
+				\draw (7,0.5) rectangle (10,1.5);
+				\node at (8.5,1) {$f\left( 2^{k - 1} \right)$};
+
+				\draw (7,-0.5) rectangle (10,-1.5);
+				\node at (8.5,-1) {$\textsc{decoder}\left( 2^{k - 1} \right)$};
+
+				\draw (10,1) -- (11,1);
+				\draw (10,-1) -- (11,-1);
+			\end{scope}
+			\begin{scope}[shift = {(0,8)}]
+				\demux{(5,0)}{0};
+
+				\draw (0,0) -- (4,0);
+			
+				\draw (6,0.5) -- (6,1) -- (7,1);
+				\draw (6,-0.5) -- (6,-1) -- (7,-1);
+
+				\node [left] at (0,0) {$X[2^{k - 1} - 1 : 0]$};
+
+				\draw (1,0) -- (1,-4) -- (2,-4);
+
+				\JO{(3,-4)}{0}{$2^{k - 1}$};
+
+				\draw (5,-3.5) -- (5,-1);
+
+				\draw (7,0.5) rectangle (10,1.5);
+				\node at (8.5,1) {$f\left( 2^{k - 1} \right)$};
+
+				\draw (7,-0.5) rectangle (10,-1.5);
+				\node at (8.5,-1) {$\textsc{decoder}\left( 2^{k - 1} \right)$};
+
+				\draw (10,1) -- (11,1);
+				\draw (10,-1) -- (11,-1);
+			\end{scope}
+		\end{tikzpicture}
+		\caption{$f(2^k)$}
+	\end{figure}
+\end{solution}
+
+\end{document}
