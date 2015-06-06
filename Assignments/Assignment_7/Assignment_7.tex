@@ -136,6 +136,8 @@
 
 		\node [left] at (0.5,0.5) {\tiny{$0$}};
 		\node [left] at (0.5,-0.5) {\tiny{$1$}};
+
+		\node at (0,0) {\tiny{$\textsc{demux}$}};
 	\end{scope}
 }
 
@@ -155,6 +157,41 @@
 }
 
 \begin{solution}
+	\begin{figure}[H]
+		\begin{tikzpicture}
+			\begin{scope}
+				\draw node at (3,2) [and port] (and1) {};
+				\draw node at (3,-2) [and port] (and2) {};
+			\end{scope}
+
+			\begin{scope}
+				\draw (-3,-1) |- (1,-1);
+
+				\draw (1,-1) |- (and1.in 1);
+				\draw (1,-1) |- (and2.in 1);
+
+				\node [left] at (-3,-1) {$x$};
+			\end{scope}
+
+			\begin{scope}
+				\draw (-3,0) |- (-2,0);
+
+				\draw node at (-1,2) [not port] (not) {};
+				\draw (-2,0) |- (not.in);
+				\draw (not.out) |- (and1.in 2);
+
+				\draw (-2,0) |- (and2.in 2);
+
+				\node [left] at (-3,0) {$S$};
+			\end{scope}
+
+			\begin{scope}
+				\node [right] at (and1.out) {$y_0$};
+				\node [right] at (and2.out) {$y_1$};
+			\end{scope}
+		\end{tikzpicture}
+		\caption{$\textsc{demux}$}
+	\end{figure}
 	\begin{figure}[H]
 		\begin{tikzpicture}[scale = 0.93]
 			\begin{scope}
